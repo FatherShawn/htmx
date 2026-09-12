@@ -1246,6 +1246,7 @@ var htmx = (() => {
                 }
             }
             this.process(document.body);
+            document.body.classList.add('htmx-active');
         }
 
         async swap(ctx) {
