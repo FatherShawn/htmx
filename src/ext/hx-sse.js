@@ -19,6 +19,7 @@
             connectTimeout: htmx.config.defaultTimeout,
             pauseOnBackground: hasHxSseConnect,
             releaseOn: hasHxSseConnect ? 'immediate' : 'end',
+            acceptLegacyAttributes: true,
             ...htmx.config.sse,
             ...hxConfig
         };
@@ -417,11 +418,12 @@
 
         htmx_after_process: (element) => {
             let mc = htmx.config.metaCharacter || ':';
+            const config = getConfig(element);
             let processSSEElement = (element) => {
                 checkLegacyAttributes(element);
                 for (let name of ['connect', 'close']) {
                     let legacyAttr = `sse-${name}`;
-                    if (!element.hasAttribute(legacyAttr)) continue;
+                    if (!(config.acceptLegacyAttributes && element.hasAttribute(legacyAttr))) continue;
 
                     let attr = (htmx.config.prefix || 'hx-') + 'sse' + mc + name;
                     if (!element.hasAttribute(attr)) element.setAttribute(attr, element.getAttribute(legacyAttr));

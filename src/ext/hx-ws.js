@@ -34,6 +34,7 @@
             reconnectJitter: 0.3,
             pauseOnBackground: true,
             maxOutgoingMessagesQueueSize: 100,
+            acceptLegacyAttributes: true,
             ...htmx.config.ws, // global defaults
             ...hxConfig // hx-config overrides
         };
@@ -513,7 +514,8 @@
     // ========================================
     
     function checkLegacyAttributes(element) {
-        if (element.hasAttribute('ws-connect') || element.hasAttribute('ws-send')) {
+        const config = getConfig(element);
+        if (config.acceptLegacyAttributes && (element.hasAttribute('ws-connect') || element.hasAttribute('ws-send'))) {
             console.warn('htmx: [hx-ws] legacy attributes ws-connect and ws-send are deprecated; use hx-ws:connect and hx-ws:send instead');
 
             if (element.hasAttribute('ws-connect')) {
